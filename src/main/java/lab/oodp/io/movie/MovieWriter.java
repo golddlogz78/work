@@ -19,7 +19,7 @@ public class MovieWriter {
 		// Get a file name from the user
 		if(fileName ==null) {
 			System.out.print("Enter a file name: ");
-			String fileName = Keyboard.readInput();
+			 fileName = Keyboard.readInput();
 		}
 
 		// Create and fill Movies array
@@ -34,9 +34,20 @@ public class MovieWriter {
 	 */
 	protected void saveMovies(String fileName, Movie[] films) {
 		// TODO: save array of movies: films into a file, uncomment sysout below
-		
+		try(DataOutputStream output = new DataOutputStream(new FileOutputStream(fileName))){
+			output.writeInt(films.length);
+			for(Movie movie : films) {
+				output.writeUTF(movie.getName());
+				output.writeInt(movie.getYear());
+				output.writeInt(movie.getLengthInMinutes());
+				output.writeUTF(movie.getDirector());
+			}
+			
+		}catch (IOException e) {
+			System.out.println("Error" + e.getMessage());
+		}
 
-		//System.out.println("Movies saved successfully to " + fileName + "!");
+		System.out.println("Movies saved successfully to " + fileName + "!");
 	}
 
 	/**

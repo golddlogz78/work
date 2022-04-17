@@ -31,16 +31,22 @@ public class MovieReader {
        films = loadMovies(fileName);
 
         // Do some stuff with the data to check that its working
-        printMoviesArray(films);
-        Movie mostRecentMovie = getMostRecentMovie(films);
-        Movie longestMovie = getLongestMovie(films);
-        printResults(mostRecentMovie, longestMovie);
-        System.out.println();
-        printDirector("Searching for Sugar Man", films);
-        printDirector("Liberal Arts", films);
-        printDirector("The Intouchables", films);
+      try {
+    	  printMoviesArray(films);
+          Movie mostRecentMovie = getMostRecentMovie(films);
+          Movie longestMovie = getLongestMovie(films);
+          printResults(mostRecentMovie, longestMovie);
+          System.out.println();
+          printDirector("Searching for Sugar Man", films);
+          printDirector("Liberal Arts", films);
+          printDirector("The Intouchables", films);
+      
+	}catch (NullPointerException e) {
+		System.out.println("Error : " + e.getMessage());
+	}
 
-    }
+	}
+    
 
     /**
      * Reads movies from a file.
@@ -50,7 +56,22 @@ public class MovieReader {
      */
     public Movie[] loadMovies(String fileName) {
     	//TODO: remove return null below, load movies from data file, 
-        
+           	try(DataInputStream input = new DataInputStream(new FileInputStream(fileName))){
+    		Movie[] films = new Movie[input.readInt()];
+        	
+    		for(int i = 0; i < films.length; i++) {
+    			String movieName = input.readUTF();
+    			int year = input.readInt();
+    			int movieL = input.readInt();
+    			String director = input.readUTF();
+    			films[i] = new Movie(movieName, year, movieL, director);
+    			
+    		}
+    		return films;
+        	
+        }catch(IOException e){
+        	System.out.println(e);
+        }
     	return null;
 
     }
